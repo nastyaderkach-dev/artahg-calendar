@@ -1,0 +1,309 @@
+<!doctype html>
+<html lang="uk">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="Календар презентацій продуктів Yara для команди продажів Арта-Хімгруп: три продукти на тиждень, листопад 2026 — жовтень 2027.">
+<meta name="robots" content="noindex">
+<title>Календар продуктів Арта-Хімгруп</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Unbounded:wght@500;700&family=Onest:wght@400;500;600;700&family=JetBrains+Mono:wght@500;700&display=swap">
+<style>
+/* Layout: field calendar — year strip (each week = 3 coloured stripes), product finder, then months of week rows with three product cells: Пн / Ср / Пт */
+:root {
+  --bg: #F2F5F1; --surface: #FFFFFF; --ink: #10241B; --muted: #4E6359; --line: #D6DFD9;
+  --accent: #1E6B44; --sun: #F0CD4A; --sun-ink: #2B2205;
+  --n: #2F7FD1; --p: #C2562E; --k: #8B5CC9;
+  --f-mila: #2F6FD0; --f-vita: #1E8A55; --f-kristalon: #C2562E; --f-krista: #8B5CC9;
+  --f-rexolin: #B23A6E; --f-liva: #0E8C9C; --f-bela: #A77A0A; --f-vera: #5C6B2E; --f-other: #6B6B6B; --f-special: #7A8A82;
+  --tint: 11%;
+  --display: "Unbounded", "Arial Black", system-ui, sans-serif;
+  --body: "Onest", "Segoe UI", system-ui, sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, Menlo, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0C1511; --surface: #13201A; --ink: #E5EEE8; --muted: #9AB0A4; --line: #243830; --accent: #5CC28A;
+    --n: #6FAEF0; --p: #EE8A63; --k: #B794F0;
+    --f-mila: #7AA8F2; --f-vita: #5CC28A; --f-kristalon: #EE8A63; --f-krista: #B794F0;
+    --f-rexolin: #E07AA8; --f-liva: #4CC6D4; --f-bela: #E0B84A; --f-vera: #A9BC6A; --f-other: #A8A8A8; --f-special: #7E9288;
+    --tint: 16%; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0C1511; --surface: #13201A; --ink: #E5EEE8; --muted: #9AB0A4; --line: #243830; --accent: #5CC28A;
+  --n: #6FAEF0; --p: #EE8A63; --k: #B794F0;
+  --f-mila: #7AA8F2; --f-vita: #5CC28A; --f-kristalon: #EE8A63; --f-krista: #B794F0;
+  --f-rexolin: #E07AA8; --f-liva: #4CC6D4; --f-bela: #E0B84A; --f-vera: #A9BC6A; --f-other: #A8A8A8; --f-special: #7E9288;
+  --tint: 16%; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { margin: 0; }
+img { max-width: 100%; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15px; line-height: 1.5;
+  padding-left: max(16px, env(safe-area-inset-left, 0px)); padding-right: max(16px, env(safe-area-inset-right, 0px)); }
+.wrap { max-width: 1120px; margin: 0 auto; padding-block: 40px 64px; display: grid; gap: 40px; }
+a { color: inherit; }
+:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; border-radius: 4px; }
+h2 { font-family: var(--display); font-weight: 500; font-size: 20px; margin: 0; }
+.eyebrow { font-family: var(--mono); font-size: 12px; letter-spacing: .08em; text-transform: uppercase; color: var(--muted); }
+.top { display: grid; gap: 10px; }
+h1 { font-family: var(--display); font-weight: 700; font-size: clamp(30px, 5.4vw, 56px); line-height: 1.02; letter-spacing: -.02em; margin: 0; text-wrap: balance; }
+h1 em { font-style: normal; color: var(--accent); }
+.lede { max-width: 62ch; color: var(--muted); margin: 4px 0 0; }
+.facts { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 6px; }
+.fact { display: grid; padding: 10px 16px; border-radius: 12px; background: var(--surface); border: 1px solid var(--line); }
+.fact b { font: 700 22px var(--mono); }
+.fact span { font-size: 12px; color: var(--muted); }
+
+/* year strip */
+.year { display: grid; gap: 14px; }
+.row-tools { display: flex; flex-wrap: wrap; gap: 10px 20px; justify-content: space-between; align-items: center; }
+.strip { display: flex; flex-wrap: wrap; gap: 14px 10px; }
+.sm { display: grid; gap: 6px; }
+.sm-label { font: 600 11px var(--mono); letter-spacing: .06em; text-transform: uppercase; color: var(--muted); }
+.sm-cells { display: flex; gap: 4px; }
+.cell { width: 30px; height: 42px; border-radius: 7px; border: 0; padding: 0; cursor: pointer; display: grid; grid-template-rows: repeat(3, 1fr); gap: 2px; background: transparent; overflow: hidden; }
+.cell i { display: block; background: var(--c); }
+.cell i.rep { background: transparent; border: 1.5px dashed var(--c); border-radius: 3px; }
+.cell i.dim { opacity: .15; }
+.cell.past { opacity: .45; }
+.cell.current { outline: 3px solid var(--sun); outline-offset: 2px; }
+.cell.gap { border: 1px dashed var(--line); cursor: default; }
+.legend { display: flex; flex-wrap: wrap; gap: 6px; }
+.chip-btn { font: 500 13px var(--body); padding: 6px 12px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); cursor: pointer; display: inline-flex; gap: 7px; align-items: center; }
+.chip-btn i { width: 10px; height: 10px; border-radius: 3px; background: var(--c, var(--muted)); }
+.chip-btn[aria-pressed="true"] { background: var(--ink); color: var(--bg); border-color: var(--ink); }
+.toggle { font-size: 13px; color: var(--muted); display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+
+/* finder */
+.finder { display: grid; gap: 10px; padding: 18px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.finder label { font-weight: 600; }
+.finder select { font: 500 15px var(--body); padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); max-width: 100%; }
+.found { display: flex; flex-wrap: wrap; gap: 8px; min-height: 38px; align-items: center; color: var(--muted); font-size: 14px; }
+.found button { font: 700 14px var(--mono); padding: 8px 12px; border-radius: 10px; border: 0; cursor: pointer; color: var(--ink); background: color-mix(in srgb, var(--c) var(--tint), var(--surface)); box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--c) 35%, transparent); }
+.found button small { font: 500 11px var(--body); color: var(--muted); margin-left: 6px; }
+
+/* months */
+.months { display: grid; gap: 36px; }
+.month { display: grid; gap: 12px; }
+.month h3 { font-family: var(--display); font-weight: 700; font-size: 26px; margin: 0; }
+.wk { display: grid; grid-template-columns: 96px minmax(0, 1fr); gap: 14px; align-items: stretch; scroll-margin-top: 24px; border-radius: 16px; padding: 6px; }
+.wk.past { opacity: .5; }
+.wk.current { background: color-mix(in srgb, var(--sun) 35%, transparent); }
+.wk.flash { animation: flash 1.3s ease-out; }
+@keyframes flash { 0% { background: color-mix(in srgb, var(--sun) 60%, transparent); } 100% { background: transparent; } }
+.wk-side { display: grid; gap: 4px; align-content: center; padding-left: 6px; }
+.wk-side b { font: 700 18px var(--mono); font-variant-numeric: tabular-nums; }
+.wk-side span { font: 600 10px var(--mono); letter-spacing: .06em; color: var(--muted); text-transform: uppercase; }
+.wk-side .tag { justify-self: start; font: 700 10px var(--body); padding: 2px 7px; border-radius: 6px; background: var(--ink); color: var(--bg); text-transform: none; letter-spacing: 0; }
+.wk-side .tag.now-tag { background: var(--sun); color: var(--sun-ink); }
+.slots { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; }
+.slot { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 4px 10px; padding: 12px 14px; border-radius: 14px; min-height: 92px;
+  background: color-mix(in srgb, var(--c) var(--tint), var(--surface)); border: 1px solid color-mix(in srgb, var(--c) 28%, transparent); }
+.slot.rep { background: transparent; border: 2px dashed color-mix(in srgb, var(--c) 55%, transparent); }
+.slot.dim { opacity: .25; }
+.s-day { grid-column: 1 / -1; display: flex; gap: 8px; align-items: baseline; font: 700 12px var(--mono); color: var(--c); }
+.s-day em { font-style: normal; color: var(--muted); font-weight: 500; }
+.s-name { font-weight: 700; font-size: 16px; line-height: 1.25; text-wrap: balance; align-self: end; }
+.s-name a { text-decoration: none; }
+.s-name a:hover { text-decoration: underline; text-underline-offset: 3px; }
+.s-fam { font: 600 11px var(--mono); color: var(--c); grid-column: 1; }
+.npk { grid-column: 2; grid-row: 2 / span 2; display: grid; grid-template-columns: repeat(3, 10px); gap: 3px; align-items: end; height: 42px; align-self: end; }
+.npk div { display: grid; grid-template-rows: 1fr auto; gap: 2px; height: 100%; justify-items: center; }
+.npk i { width: 8px; border-radius: 2px 2px 0 0; align-self: end; display: block; }
+.npk small { font: 700 8px var(--mono); color: var(--muted); }
+.empty { padding: 24px; text-align: center; color: var(--muted); border: 1px dashed var(--line); border-radius: 14px; }
+footer { font-size: 13px; color: var(--muted); display: grid; gap: 6px; border-top: 1px solid var(--line); padding-top: 20px; }
+footer p { margin: 0; max-width: 80ch; }
+@media (max-width: 760px) {
+  .wrap { padding-block: 24px 48px; gap: 32px; }
+  .wk { grid-template-columns: minmax(0, 1fr); gap: 8px; padding: 4px; }
+  .wk-side { grid-auto-flow: column; justify-content: start; align-items: baseline; gap: 10px; padding-left: 2px; }
+  .slots { grid-template-columns: minmax(0, 1fr); gap: 6px; }
+  .slot { min-height: 0; }
+  .cell { width: 22px; height: 34px; }
+}
+@media (prefers-reduced-motion: reduce) { .wk.flash { animation: none; } html { scroll-behavior: auto; } }
+html { scroll-behavior: smooth; }
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <header class="top">
+    <div class="eyebrow">Арта-Хімгруп · команда продажів · листопад 2026 — жовтень 2027</div>
+    <h1>Три виступи — <em>три продукти</em></h1>
+    <p class="lede">Щотижня в понеділок, середу і пʼятницю менеджери презентують три різні продукти Yara з магазину shop.artahg.com.ua. За рік уся лінійка проходить тричі, щоразу ближче до свого сезону.</p>
+    <div class="facts">
+      <div class="fact"><b>46</b><span>продуктів</span></div>
+      <div class="fact"><b>50</b><span>тижнів</span></div>
+      <div class="fact"><b>150</b><span>виступів</span></div>
+      <div class="fact"><b>3</b><span>кола лінійки</span></div>
+    </div>
+  </header>
+
+  <section class="year">
+    <div class="row-tools">
+      <h2>Рік одним поглядом</h2>
+      <label class="toggle" for="showPast"><input type="checkbox" id="showPast" checked> Показувати минулі тижні</label>
+    </div>
+    <div class="strip" id="strip" aria-label="50 тижнів: кожен стовпчик — тиждень, три смужки — Пн, Ср, Пт"></div>
+    <div class="legend" id="filters" role="group" aria-label="Фільтр за лінійкою"></div>
+  </section>
+
+  <section class="finder">
+    <label for="pick">Коли презентуємо продукт?</label>
+    <select id="pick"></select>
+    <div class="found" id="found">Оберіть продукт, щоб побачити три дати його виступів.</div>
+  </section>
+
+  <section class="months" id="months"></section>
+
+  <footer>
+    <p>Коло 1 — 9.11–5.03, коло 2 — 8.03–25.06, коло 3 — 28.06–15.10. 18.10 — тиждень повтору, 25.10 — фінальний батл. 28.12–1.01 виступів немає.</p>
+    <p>«Повтор» — продукт із найнижчою оцінкою команди за коло. «Жереб» — понеділок, коли тягнемо черговість менеджерів на наступні 5 тижнів. Асортимент — shop.artahg.com.ua станом на 28.10.2026.</p>
+  </footer>
+</div>
+
+<script>
+const SHOP = 'https://shop.artahg.com.ua/';
+const FAM = {
+  mila: ['YaraMila', '--f-mila'], vita: ['YaraVita', '--f-vita'], kristalon: ['Kristalon', '--f-kristalon'],
+  krista: ['YaraTera Krista', '--f-krista'], rexolin: ['Rexolin', '--f-rexolin'], liva: ['YaraLiva', '--f-liva'],
+  bela: ['YaraBela', '--f-bela'], vera: ['YaraVera', '--f-vera'], other: ['Інше', '--f-other'], special: ['Повтор / батл', '--f-special']
+};
+const P = {"YaraMila COMPLEX 12-11-18": {"fam": "mila", "path": "yaramila/yaramila-complex-12-11-8-25kg", "npk": [12, 11, 18]}, "YaraMila CROPCARE 11-11-21": {"fam": "mila", "path": "yaramila/yaramila-cropcare-11-11-21-25kg", "npk": [11, 11, 21]}, "YaraMila NPK 16-16-16": {"fam": "mila", "path": "yaramila/yaramila-npk-16-16-16-600kg", "npk": [16, 16, 16]}, "YaraMila NPK 12-24-12": {"fam": "mila", "path": "yaramila/yaramila-npk-12-24-12-600kg", "npk": [12, 24, 12]}, "YaraMila NPK 16-27-7": {"fam": "mila", "path": "yaramila/yaramila-npk-16-27-7-600kg", "npk": [16, 27, 7]}, "YaraLiva CALCINIT": {"fam": "liva", "path": "yaraliva/yaraliva-calcinit-25kg", "npk": null}, "Kristalon 18-18-18 Special": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-18-18-18-special-25kg", "npk": [18, 18, 18]}, "Kristalon 13-40-13 Yellow": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-13-40-13-yellow-25kg", "npk": [13, 40, 13]}, "YaraTera Krista MAP": {"fam": "krista", "path": "krista/yaratera-krista-map-25kg", "npk": null}, "PG MIX 14-16-18": {"fam": "other", "path": "yara/pg-mix-14-16-18-25kg", "npk": [14, 16, 18]}, "YaraBela Sulfan": {"fam": "bela", "path": "yarabela/yarabela-sulfan-600kg", "npk": null}, "YaraVera AMIDAS": {"fam": "vera", "path": "yaravera/yaravera-amidas-500kg", "npk": null}, "YaraVita TEPROSYN NP+Zn": {"fam": "vita", "path": "yaravita/yaravita-teprosyn-np-zn", "npk": null}, "Kristalon 19-6-6 Lilac": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-19-6-6-lilac-25kg", "npk": [19, 6, 6]}, "Особливе добриво 18-20-18+micro": {"fam": "other", "path": "osoblyve-dobryvo/osoblyve-dobryvo-sashe-50g", "npk": [18, 20, 18]}, "YaraVita THIOTRAC 300": {"fam": "vita", "path": "yaravita/yaravita-thiotrac-300-10l", "npk": null}, "YaraVita MANTRAC PRO": {"fam": "vita", "path": "yaravita/yaravita-mantrac-pro-5l", "npk": null}, "YaraVita BRASSITREL PRO": {"fam": "vita", "path": "yaravita/yaravita-brassitrel-pro-10l", "npk": null}, "Kristalon 17-6-18 Blue": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-17-6-18-blue-25kg", "npk": [17, 6, 18]}, "YaraVita GRAMITREL": {"fam": "vita", "path": "yaravita/yaravita-gramitrel-10l", "npk": null}, "YaraLiva NITRABOR": {"fam": "liva", "path": "yaraliva/yaraliva-nitrabor-25kg", "npk": null}, "Kristalon 12-12-36 Red": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-12-12-36-red-25kg", "npk": [12, 12, 36]}, "YaraTera Krista MKP": {"fam": "krista", "path": "krista/yaratera-krista-mkp-25kg", "npk": null}, "YaraVita ZINTRAC 700": {"fam": "vita", "path": "yaravita/yaravita-zintrac-700-5l", "npk": null}, "YaraVita MAIZE BOOST": {"fam": "vita", "path": "yaravita/yaravita-maize-boost-10l", "npk": null}, "YaraVita BORTRAC 150": {"fam": "vita", "path": "yaravita/yaravita-bortrac-150-10l", "npk": null}, "YaraVita MOLYTRAC 250": {"fam": "vita", "path": "yaravita/yaravita-molytrac-250-5l", "npk": null}, "YaraVita KOMBIPHOS": {"fam": "vita", "path": "yaravita/yaravita-kombiphos-10l", "npk": null}, "YaraVita MANCOZIN": {"fam": "vita", "path": "yaravita/yaravita-mancozin-5l", "npk": null}, "YaraVita BIOMARIS": {"fam": "vita", "path": "yaravita/yaravita-biomaris-10l", "npk": null}, "YaraVita BIOTRAC": {"fam": "vita", "path": "yaravita/yaravita-biotrac-10l", "npk": null}, "YaraMila NPK 7-20-28": {"fam": "mila", "path": "yaramila/yaramila-npk-7-20-28-600kg", "npk": [7, 20, 28]}, "YaraMila NPK 8-24-24": {"fam": "mila", "path": "yaramila/yaramila-npk-8-24-24-600kg", "npk": [8, 24, 24]}, "YaraMila NPK 9-12-25": {"fam": "mila", "path": "yaramila/yaramila-npk-9-12-25-600kg", "npk": [9, 12, 25]}, "YaraTera Krista MgS": {"fam": "krista", "path": "krista/yaratera-krista-mgs-25kg", "npk": null}, "YaraVita UNIVERSAL BIO": {"fam": "vita", "path": "yaravita/yaravita-universal-bio-10l", "npk": null}, "Kristalon 13-5-26 White": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-13-5-26-white-25kg", "npk": [13, 5, 26]}, "YaraTera Krista SOP": {"fam": "krista", "path": "krista/yaratera-krista-sop-25kg", "npk": null}, "YaraTera Krista MAG": {"fam": "krista", "path": "krista/yaratera-krista-mag-25kg", "npk": null}, "Kristalon 19-6-20 Blue Label": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-19-6-20-blue-label-25kg", "npk": [19, 6, 20]}, "Kristalon 6-12-36 Orange": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-6-12-36-orange-25kg", "npk": [6, 12, 36]}, "Kristalon 7,5-12-36 Scarlet": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-7-5-12-36-scarlet-25kg", "npk": [7.5, 12, 36]}, "Kristalon 3-11-38 Brown": {"fam": "kristalon", "path": "kristalon/yaratera-kristalon-3-11-38-brown-25kg", "npk": [3, 11, 38]}, "YaraTera REXOLIN ABC": {"fam": "rexolin", "path": "rexolin/yaratera-rexolin-abc-5kg", "npk": null}, "YaraTera REXOLIN D12": {"fam": "rexolin", "path": "rexolin/yaratera-rexolin-d12-5kg", "npk": null}, "YaraTera REXOLIN Q40": {"fam": "rexolin", "path": "rexolin/yaratera-rexolin-q40-5kg", "npk": null}};
+const PLAN = [{"round": 1, "slots": ["YaraMila COMPLEX 12-11-18", "YaraMila CROPCARE 11-11-21", "YaraMila NPK 16-16-16"]}, {"round": 1, "slots": ["YaraMila NPK 12-24-12", "YaraMila NPK 16-27-7", "YaraMila NPK 7-20-28"]}, {"round": 1, "slots": ["YaraMila NPK 8-24-24", "YaraMila NPK 9-12-25", "YaraLiva CALCINIT"]}, {"round": 1, "slots": ["YaraLiva NITRABOR", "Kristalon 18-18-18 Special", "Kristalon 13-40-13 Yellow"]}, {"round": 1, "slots": ["Kristalon 19-6-6 Lilac", "Kristalon 17-6-18 Blue", "Kristalon 12-12-36 Red"]}, {"round": 1, "slots": ["Kristalon 13-5-26 White", "Kristalon 19-6-20 Blue Label", "Kristalon 6-12-36 Orange"]}, {"round": 1, "slots": ["Kristalon 7,5-12-36 Scarlet", "Kristalon 3-11-38 Brown", "YaraTera Krista MAP"]}, {"round": 1, "slots": ["YaraTera Krista MKP", "YaraTera Krista SOP", "YaraTera Krista MAG"]}, {"round": 1, "slots": ["YaraTera Krista MgS", "PG MIX 14-16-18", "YaraTera REXOLIN ABC"]}, {"round": 1, "slots": ["YaraTera REXOLIN D12", "YaraTera REXOLIN Q40", "YaraBela Sulfan"]}, {"round": 1, "slots": ["YaraVera AMIDAS", "YaraVita TEPROSYN NP+Zn", "YaraVita THIOTRAC 300"]}, {"round": 1, "slots": ["YaraVita MANTRAC PRO", "YaraVita BRASSITREL PRO", "YaraVita GRAMITREL"]}, {"round": 1, "slots": ["YaraVita ZINTRAC 700", "YaraVita MAIZE BOOST", "YaraVita BORTRAC 150"]}, {"round": 1, "slots": ["YaraVita MOLYTRAC 250", "YaraVita KOMBIPHOS", "YaraVita MANCOZIN"]}, {"round": 1, "slots": ["YaraVita BIOMARIS", "YaraVita BIOTRAC", "YaraVita UNIVERSAL BIO"]}, {"round": 1, "slots": ["Особливе добриво 18-20-18+micro", "__rep", "__rep"]}, {"round": 2, "slots": ["Особливе добриво 18-20-18+micro", "YaraMila CROPCARE 11-11-21", "YaraMila COMPLEX 12-11-18"]}, {"round": 2, "slots": ["YaraVita THIOTRAC 300", "YaraVita MANTRAC PRO", "YaraVita BRASSITREL PRO"]}, {"round": 2, "slots": ["YaraVita GRAMITREL", "YaraVita TEPROSYN NP+Zn", "YaraBela Sulfan"]}, {"round": 2, "slots": ["YaraVera AMIDAS", "YaraMila NPK 16-16-16", "YaraMila NPK 12-24-12"]}, {"round": 2, "slots": ["YaraVita ZINTRAC 700", "YaraVita MAIZE BOOST", "YaraVita BORTRAC 150"]}, {"round": 2, "slots": ["YaraVita MOLYTRAC 250", "YaraLiva NITRABOR", "YaraLiva CALCINIT"]}, {"round": 2, "slots": ["YaraVita KOMBIPHOS", "YaraVita MANCOZIN", "YaraVita BIOMARIS"]}, {"round": 2, "slots": ["YaraVita BIOTRAC", "YaraVita UNIVERSAL BIO", "Kristalon 18-18-18 Special"]}, {"round": 2, "slots": ["Kristalon 13-40-13 Yellow", "Kristalon 19-6-6 Lilac", "Kristalon 17-6-18 Blue"]}, {"round": 2, "slots": ["Kristalon 12-12-36 Red", "Kristalon 13-5-26 White", "Kristalon 19-6-20 Blue Label"]}, {"round": 2, "slots": ["Kristalon 6-12-36 Orange", "Kristalon 7,5-12-36 Scarlet", "Kristalon 3-11-38 Brown"]}, {"round": 2, "slots": ["YaraTera Krista MAP", "YaraTera Krista MKP", "YaraTera Krista SOP"]}, {"round": 2, "slots": ["YaraTera Krista MAG", "YaraTera Krista MgS", "YaraTera REXOLIN ABC"]}, {"round": 2, "slots": ["YaraTera REXOLIN D12", "YaraTera REXOLIN Q40", "PG MIX 14-16-18"]}, {"round": 2, "slots": ["YaraMila NPK 16-27-7", "YaraMila NPK 7-20-28", "YaraMila NPK 8-24-24"]}, {"round": 2, "slots": ["YaraMila NPK 9-12-25", "__rep", "__rep"]}, {"round": 3, "slots": ["YaraMila NPK 7-20-28", "YaraMila NPK 8-24-24", "YaraMila NPK 9-12-25"]}, {"round": 3, "slots": ["YaraMila NPK 16-27-7", "YaraMila NPK 16-16-16", "YaraMila NPK 12-24-12"]}, {"round": 3, "slots": ["YaraMila COMPLEX 12-11-18", "YaraMila CROPCARE 11-11-21", "YaraTera Krista MgS"]}, {"round": 3, "slots": ["YaraTera Krista SOP", "YaraTera Krista MAG", "YaraTera Krista MKP"]}, {"round": 3, "slots": ["YaraTera Krista MAP", "YaraVita BRASSITREL PRO", "YaraVita THIOTRAC 300"]}, {"round": 3, "slots": ["YaraVita UNIVERSAL BIO", "YaraVita BIOMARIS", "YaraVita BIOTRAC"]}, {"round": 3, "slots": ["YaraBela Sulfan", "YaraVera AMIDAS", "YaraVita TEPROSYN NP+Zn"]}, {"round": 3, "slots": ["Kristalon 18-18-18 Special", "Kristalon 13-40-13 Yellow", "Kristalon 19-6-6 Lilac"]}, {"round": 3, "slots": ["Kristalon 17-6-18 Blue", "Kristalon 19-6-20 Blue Label", "Kristalon 13-5-26 White"]}, {"round": 3, "slots": ["Kristalon 12-12-36 Red", "Kristalon 6-12-36 Orange", "Kristalon 7,5-12-36 Scarlet"]}, {"round": 3, "slots": ["Kristalon 3-11-38 Brown", "YaraLiva CALCINIT", "YaraLiva NITRABOR"]}, {"round": 3, "slots": ["YaraTera REXOLIN ABC", "YaraTera REXOLIN D12", "YaraTera REXOLIN Q40"]}, {"round": 3, "slots": ["PG MIX 14-16-18", "Особливе добриво 18-20-18+micro", "YaraVita GRAMITREL"]}, {"round": 3, "slots": ["YaraVita MANTRAC PRO", "YaraVita ZINTRAC 700", "YaraVita MAIZE BOOST"]}, {"round": 3, "slots": ["YaraVita BORTRAC 150", "YaraVita MOLYTRAC 250", "YaraVita KOMBIPHOS"]}, {"round": 3, "slots": ["YaraVita MANCOZIN", "__rep", "__rep"]}, {"round": 0, "slots": ["__rep", "__rep", "__rep"]}, {"round": 0, "slots": ["__battle", "__battle", "__battle"]}];
+const MONTHS = ['Січень','Лютий','Березень','Квітень','Травень','Червень','Липень','Серпень','Вересень','Жовтень','Листопад','Грудень'];
+const MSHORT = ['січ','лют','бер','кві','тра','чер','лип','сер','вер','жов','лис','гру'];
+const DAY = 864e5;
+const utc = (y, m, d) => Date.UTC(y, m, d);
+const fmt = t => { const d = new Date(t); return d.getUTCDate() + '.' + String(d.getUTCMonth() + 1).padStart(2, '0'); };
+const DN = ['Пн', 'Ср', 'Пт'];
+const SKIP = utc(2026, 11, 28);
+const SPECIAL = { __rep: 'Повтор: продукт з найнижчою оцінкою', __battle: 'Фінальний батл: продукт на вибір' };
+const weeks = [];
+let t = utc(2026, 10, 9);
+PLAN.forEach((p, i) => {
+  if (t === SKIP) t += 7 * DAY;
+  const slots = p.slots.map((n, k) => {
+    const date = t + k * 2 * DAY;
+    if (SPECIAL[n]) return { special: true, name: SPECIAL[n], fam: 'special', date, day: DN[k] };
+    const pr = P[n];
+    return { name: n, fam: pr.fam, url: SHOP + pr.path, npk: pr.npk, date, day: DN[k] };
+  });
+  weeks.push({ i, mon: t, round: p.round, slots });
+  t += 7 * DAY;
+});
+const lotteryByWeek = new Map();
+for (let c = 1; c * 5 < weeks.length; c++) lotteryByWeek.set(weeks[c * 5 - 1].mon, c + 1);
+const now = new Date();
+const today = utc(now.getFullYear(), now.getMonth(), now.getDate());
+const curIdx = weeks.findIndex(w => today >= w.mon && today < w.mon + 7 * DAY);
+const isPast = w => w.mon + 7 * DAY <= today;
+const esc = s => String(s).replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c]));
+const cvar = f => `--c:var(${FAM[f][1]})`;
+const short = n => n.replace(/^(YaraTera Krista|YaraTera|YaraMila|YaraVita|YaraLiva|YaraBela|YaraVera|Kristalon)\s+/, '');
+
+let filter = 'all', showPast = true;
+try { filter = localStorage.getItem('ah3-filter') || 'all'; showPast = localStorage.getItem('ah3-past') !== '0'; } catch (e) {}
+if (filter !== 'all' && !FAM[filter]) filter = 'all';
+const ok = s => filter === 'all' || s.fam === filter;
+
+function npkBars(npk) {
+  if (!npk) return '';
+  const cols = [['N', '--n'], ['P', '--p'], ['K', '--k']];
+  return `<div class="npk" title="N-P-K ${npk.join('-')}" aria-label="Формула N-P-K ${npk.join('-')}">` +
+    npk.map((v, j) => `<div><i style="height:${Math.max(3, Math.round(v / 40 * 30))}px;background:var(${cols[j][1]})"></i><small>${cols[j][0]}</small></div>`).join('') + '</div>';
+}
+function renderStrip() {
+  const groups = []; let gapDone = false;
+  weeks.forEach(w => {
+    const d = new Date(w.mon); const key = d.getUTCFullYear() * 12 + d.getUTCMonth();
+    let g = groups[groups.length - 1];
+    if (!gapDone && w.mon > SKIP) { g.cells.push('<span class="cell gap" title="28.12 — свята, без виступів"></span>'); gapDone = true; }
+    if (!g || g.key !== key) { g = { key, m: d.getUTCMonth(), cells: [] }; groups.push(g); }
+    const tip = `${fmt(w.mon)}: ` + w.slots.map(s => short(s.name)).join(' · ');
+    g.cells.push(`<button type="button" class="cell ${isPast(w) ? 'past' : ''} ${w.i === curIdx ? 'current' : ''}" data-jump="${w.i}" title="${esc(tip)}" aria-label="${esc(tip)}">` +
+      w.slots.map(s => `<i class="${s.special ? 'rep' : ''} ${ok(s) ? '' : 'dim'}" style="${cvar(s.fam)}"></i>`).join('') + '</button>');
+  });
+  document.getElementById('strip').innerHTML = groups.map(g => `<div class="sm"><div class="sm-label">${MSHORT[g.m]}</div><div class="sm-cells">${g.cells.join('')}</div></div>`).join('');
+}
+function renderFilters() {
+  const counts = {}; Object.values(P).forEach(p => counts[p.fam] = (counts[p.fam] || 0) + 1);
+  const order = ['all', 'mila', 'vita', 'kristalon', 'krista', 'rexolin', 'liva', 'bela', 'vera', 'other'];
+  document.getElementById('filters').innerHTML = order.map(f => {
+    const label = f === 'all' ? 'Усі лінійки' : FAM[f][0];
+    const n = f === 'all' ? 46 : counts[f];
+    const dot = f === 'all' ? '' : `<i style="${cvar(f)}"></i>`;
+    return `<button class="chip-btn" type="button" id="f-${f}" data-f="${f}" aria-pressed="${filter === f}">${dot}${esc(label)} · ${n}</button>`;
+  }).join('');
+}
+function renderMonths() {
+  const groups = new Map();
+  weeks.forEach(w => {
+    if (isPast(w) && !showPast) return;
+    if (filter !== 'all' && !w.slots.some(ok)) return;
+    const d = new Date(w.mon); const key = d.getUTCFullYear() + '-' + d.getUTCMonth();
+    if (!groups.has(key)) groups.set(key, { y: d.getUTCFullYear(), m: d.getUTCMonth(), list: [] });
+    groups.get(key).list.push(w);
+  });
+  const el = document.getElementById('months');
+  if (!groups.size) { el.innerHTML = '<div class="empty">За цим фільтром тижнів немає. Оберіть «Усі лінійки» або увімкніть минулі тижні.</div>'; return; }
+  el.innerHTML = [...groups.values()].map(g => `
+    <section class="month">
+      <h3>${MONTHS[g.m]} ${g.y}</h3>
+      ${g.list.map(w => {
+        const lot = lotteryByWeek.get(w.mon); const cur = w.i === curIdx;
+        return `<div class="wk ${isPast(w) ? 'past' : ''} ${cur ? 'current' : ''}" id="w${w.i + 1}">
+          <div class="wk-side"><b>${fmt(w.mon)}</b><span>Тиж. ${w.i + 1}</span>${w.round ? `<span>Коло ${w.round}</span>` : ''}${cur ? '<span class="tag now-tag">Цей тиждень</span>' : ''}${lot ? `<span class="tag">Жереб</span>` : ''}</div>
+          <div class="slots">${w.slots.map(s => {
+            const nm = s.url ? `<a href="${s.url}" target="_blank" rel="noopener">${esc(short(s.name))}&nbsp;↗</a>` : esc(s.name);
+            return `<div class="slot ${s.special ? 'rep' : ''} ${ok(s) ? '' : 'dim'}" style="${cvar(s.fam)}">
+              <div class="s-day">${s.day} ${fmt(s.date)}</div>
+              <div class="s-name">${nm}</div>
+              <div class="s-fam">${s.special ? '' : esc(FAM[s.fam][0])}</div>
+              ${npkBars(s.npk)}
+            </div>`;
+          }).join('')}</div>
+        </div>`;
+      }).join('')}
+    </section>`).join('');
+}
+function renderPick() {
+  const sel = document.getElementById('pick');
+  const order = ['mila', 'vita', 'kristalon', 'krista', 'rexolin', 'liva', 'bela', 'vera', 'other'];
+  sel.innerHTML = '<option value="">— оберіть продукт —</option>' + order.map(f =>
+    `<optgroup label="${esc(FAM[f][0])}">` + Object.keys(P).filter(n => P[n].fam === f).map(n => `<option value="${esc(n)}">${esc(n)}</option>`).join('') + '</optgroup>').join('');
+  sel.addEventListener('change', () => {
+    const n = sel.value; const out = document.getElementById('found');
+    if (!n) { out.textContent = 'Оберіть продукт, щоб побачити три дати його виступів.'; return; }
+    const hits = [];
+    weeks.forEach(w => w.slots.forEach(s => { if (s.name === n) hits.push({ w, s }); }));
+    out.innerHTML = hits.map(h => `<button type="button" data-jump="${h.w.i}" style="${cvar(h.s.fam)}">${h.s.day} ${fmt(h.s.date)}<small>коло ${h.w.round}</small></button>`).join('');
+  });
+}
+function jump(i) {
+  const w = weeks[i];
+  if (filter !== 'all' && !w.slots.some(ok)) { filter = 'all'; renderAll(); }
+  if (isPast(w) && !showPast) { showPast = true; pastBox.checked = true; renderMonths(); }
+  const el = document.getElementById('w' + (i + 1));
+  if (el) { el.scrollIntoView({ block: 'center' }); el.classList.remove('flash'); void el.offsetWidth; el.classList.add('flash'); }
+}
+document.addEventListener('click', e => {
+  const j = e.target.closest('[data-jump]');
+  if (j) { e.preventDefault(); jump(+j.dataset.jump); return; }
+  const b = e.target.closest('#filters button');
+  if (b) { filter = b.dataset.f; try { localStorage.setItem('ah3-filter', filter); } catch (err) {} renderAll(); }
+});
+const pastBox = document.getElementById('showPast');
+pastBox.checked = showPast;
+pastBox.addEventListener('change', () => { showPast = pastBox.checked; try { localStorage.setItem('ah3-past', showPast ? '1' : '0'); } catch (e) {} renderMonths(); });
+function renderAll() { renderFilters(); renderStrip(); renderMonths(); }
+renderPick(); renderAll();
+</script>
+
+</body>
+</html>
